@@ -11,18 +11,21 @@ const { dbConnect } = require('./db-mongoose');
 const app = express();
 const brews = 
   [
-    "Allagash Dubbel Reserve",
-    "Amsterdam Framboise",
-    "Bitter Woman From Hell Extra IPA",
-    "Corsendonk Abbey Brown Ale",
-    "Dogfish Head 90 Minute Imperial IPA",
-    "Erdinger Weißbier Dunkel",
-    "Kirin Autumn Lager",
-    "Lagunitas India Pale Ale",
-    "Russian River Blind Pig IPA",
-    "Speakeasy Prohibition Ale",
-    "Trappistes Rochefort",
-    "Westmalle Trappist Tripel"
+    {name:'Allagash Dubbel Reserve',
+      recipe: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      notes: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+    } 
+    // "Amsterdam Framboise",
+    // "Bitter Woman From Hell Extra IPA",
+    // "Corsendonk Abbey Brown Ale",
+    // "Dogfish Head 90 Minute Imperial IPA",
+    // "Erdinger Weißbier Dunkel",
+    // "Kirin Autumn Lager",
+    // "Lagunitas India Pale Ale",
+    // "Russian River Blind Pig IPA",
+    // "Speakeasy Prohibition Ale",
+    // "Trappistes Rochefort",
+    // "Westmalle Trappist Tripel"
 ];
 
 app.use(
@@ -39,6 +42,12 @@ app.use(
 
 app.get('/api/brews', (req, res) => {
   res.json(brews);
+});
+
+app.post('/api/brews', (req, res)=>{
+  const {name, recipe, notes}=req.body;
+  console.log(name, recipe, notes);
+  res.json("name, recipe, notes");
 });
 
 function runServer(port = PORT) {
