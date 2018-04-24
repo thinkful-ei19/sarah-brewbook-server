@@ -7,6 +7,9 @@ const morgan = require('morgan');
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
 // const {dbConnect} = require('./db-knex');
+const bodyParser = require('body-parser');
+
+// const brewRouter = require('./routes/brews';)
 
 const app = express();
 const brews = 
@@ -39,6 +42,8 @@ app.use(
     origin: CLIENT_ORIGIN
   })
 );
+
+app.use(bodyParser.json());
 
 app.get('/api/brews', (req, res) => {
   res.json(brews);
