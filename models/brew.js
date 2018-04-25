@@ -3,8 +3,8 @@
 const mongoose = require('mongoose');
 
 const brewSchema = new mongoose.Schema({
-  name: { type: String },
-  recipe: { type: String },
+  name: { type: String, required: true },
+  recipe: { type: String, required: true },
   notes: { type: String},
   created: { type: Date, default: Date.now },
   // folderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder' },

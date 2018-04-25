@@ -1,15 +1,21 @@
 'use strict';
 
+// require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
+//is above redundant bc of db-mongoose.js?
 
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
 // const {dbConnect} = require('./db-knex');
 const bodyParser = require('body-parser');
 
-// const brewRouter = require('./routes/brews';)
+//import routers
+const brewsRouter = require('./routes/brews');
+// const usersRouter = require('./routes/users');
 
 const app = express();
 const brews = 
@@ -17,25 +23,19 @@ const brews =
     {name:'Allagash Dubbel Reserve',
       recipe: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       notes: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      //will delete when router functional
     } 
-    // "Amsterdam Framboise",
-    // "Bitter Woman From Hell Extra IPA",
-    // "Corsendonk Abbey Brown Ale",
-    // "Dogfish Head 90 Minute Imperial IPA",
-    // "Erdinger Weißbier Dunkel",
-    // "Kirin Autumn Lager",
-    // "Lagunitas India Pale Ale",
-    // "Russian River Blind Pig IPA",
-    // "Speakeasy Prohibition Ale",
-    // "Trappistes Rochefort",
-    // "Westmalle Trappist Tripel"
 ];
 
+//Log all requests but skip logging during test
 app.use(
   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
     skip: (req, res) => process.env.NODE_ENV === 'test'
   })
 );
+
+// Utilize the Express static webserver, passing in the directory name.** Do I need this?**
+// app.use(express.static('public'));
 
 app.use(
   cors({
@@ -43,7 +43,24 @@ app.use(
   })
 );
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+// Utilize the Express `.json()` body parser
+app.use(express.json());
+
+//call on passport when user authentication is functional
+// passport.use(localStrategy);
+// passport.use(jwtStrategy);
+
+//Mount routers
+// app.use('/api', usersRouter);
+// app.use('/api', authRouter);
+
+//Endpoint below witll require valid JWT when implemented
+// app.use(passport.authenticate('jwt', { session: false, failWithError: true }));
+
+//mount routers requiring authentication when implemented
+app.use('/api', brewsRouter);
+
 
 app.get('/api/brews', (req, res) => {
   res.json(brews);
@@ -54,6 +71,8 @@ app.post('/api/brews', (req, res)=>{
   console.log(name, recipe, notes);
   res.json("name, recipe, notes");
 });
+
+
 
 function runServer(port = PORT) {
   const server = app

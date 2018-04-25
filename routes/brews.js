@@ -8,9 +8,12 @@ const Brew = require('../models/brew');
 
 router.get('/brews', (req, res, next) => {
   return Brew.find()
-    .then(result => {
-      res.json(result);
-      console.log(result);
+    .then(brews => {
+      res.json(brews);
+      console.log(brews);
+    })
+    .catch(err => {
+      next(err);
     });
 });
 
@@ -27,4 +30,4 @@ router.post('/brews', (req, res, next) => {
     .next();
 });
 
-module.export = router;
+module.exports = router;
