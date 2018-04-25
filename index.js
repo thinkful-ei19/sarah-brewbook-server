@@ -18,14 +18,14 @@ const brewsRouter = require('./routes/brews');
 // const usersRouter = require('./routes/users');
 
 const app = express();
-const brews = 
-  [
-    {name:'Allagash Dubbel Reserve',
-      recipe: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-      notes: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-      //will delete when router functional
-    } 
-];
+// const brews = 
+//   [
+//     {name:'Allagash Dubbel Reserve',
+//       recipe: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+//       notes: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+//       //will delete when router functional
+//     } 
+// ];
 
 //Log all requests but skip logging during test
 app.use(
@@ -62,15 +62,15 @@ app.use(express.json());
 app.use('/api', brewsRouter);
 
 
-app.get('/api/brews', (req, res) => {
-  res.json(brews);
-});
+// app.get('/api/brews', (req, res) => {
+//   res.json(brews);
+// });
 
-app.post('/api/brews', (req, res)=>{
-  const {name, recipe, notes}=req.body;
-  console.log(name, recipe, notes);
-  res.json("name, recipe, notes");
-});
+// app.post('/api/brews', (req, res)=>{
+//   const {name, recipe, notes}=req.body;
+//   console.log(name, recipe, notes);
+//   res.json("name, recipe, notes");
+// });
 
 
 
