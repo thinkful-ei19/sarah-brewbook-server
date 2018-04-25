@@ -17,8 +17,8 @@ router.get('/brews', (req, res, next) => {
     });
 });
 
-router.post('/brews', (req, res, next) => {
-  const {name, recipe, notes} = res.body.brews;
+router.post('/brews', (req, res) => {
+  const {name, recipe, notes} = req.body;
   const newBrew = {
     name, recipe, notes
   };
@@ -26,8 +26,8 @@ router.post('/brews', (req, res, next) => {
     .then(result => {
       res.location(`${req.originalUrl}/${result.id}`).status(201).json(result);
       console.log(result);
-    })
-    .next();
+    });
+    // .next();
 });
 
 module.exports = router;
