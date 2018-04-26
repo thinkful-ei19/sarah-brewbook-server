@@ -80,4 +80,56 @@ router.post('/brews', (req, res, next) => {
     });
 });
 
+router.put('/brews/:id', (req, res, next) => {
+  const { id } = req.params;
+  const { name, recipe, notes } = req.body;
+  const userId = req.user.id;
+
+  const updateBrew = { name, recipe, notes, userId };
+  const options = { new: true };
+
+  /***** Never trust users or developers - validate input *****/
+  if (!name) {
+    const err = new Error('Missing `name` in request body');
+    err.status = 400;
+    return next(err);
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const err = new Error('The `id` is not valid');
+    err.status = 400;
+    return next(err);
+  }
+
+  return Brew.findByIdAndUpdate(id, updateBrew, options)
+    .then(result => {
+      if (result) {
+        res.json(result);
+      } else {
+        next();
+      }
+    })
+    .catch(err => {
+      next(err);
+    });
+});
+
+/* ========== DELETE/REMOVE A SINGLE ITEM ========== */
+router.delete('/brews/:id', (req, res, next) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+
+  Brew.findOneAndRemove({_id: id, userId})
+    .then(result => {
+      if(result) {
+        res.status(204).end();
+      } else {
+        next();
+      }
+    })
+    .catch(err => {
+      next(err);
+    });
+});
+
 module.exports = router;
