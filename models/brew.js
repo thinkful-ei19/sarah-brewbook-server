@@ -9,7 +9,7 @@ const brewSchema = new mongoose.Schema({
   created: { type: Date, default: Date.now },
   // folderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder' },
   // tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }],
-  // userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
 brewSchema.set('toObject', {
