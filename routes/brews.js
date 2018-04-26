@@ -49,17 +49,35 @@ router.get('/brews/:id', (req, res, next) => {
 });
 
 
-router.post('/brews', (req, res) => {
+router.post('/brews', (req, res, next) => {
   const {name, recipe, notes} = req.body;
+  const userId = req.user.id;
+  console.log(userId);
+
+  //validate input
+  if (!name) {
+    const err = new Error('Missing `name` in request body');
+    err.status = 400;
+    return next(err);
+  }
+
+  if (!recipe) {
+    const err = new Error('Missing `recipe` in request body');
+    err.status = 400;
+    return next(err);
+  }
+
   const newBrew = {
-    name, recipe, notes
+    name, recipe, notes, userId
   };
   return Brew.create(newBrew)
     .then(result => {
       res.location(`${req.originalUrl}/${result.id}`).status(201).json(result);
       console.log(result);
+    })
+    .catch(err => {
+      next(err);
     });
-    // .next();
 });
 
 module.exports = router;
