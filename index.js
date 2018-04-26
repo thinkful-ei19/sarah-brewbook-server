@@ -1,6 +1,6 @@
 'use strict';
 
-// require('dotenv').config();
+require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
@@ -14,11 +14,12 @@ const { dbConnect } = require('./db-mongoose');
 // const {dbConnect} = require('./db-knex');
 const bodyParser = require('body-parser');
 const localStrategy = require('./passport/local');
-// const jwtStrategy = require('./passport/jwt');
+const jwtStrategy = require('./passport/jwt');
 
 //import routers
 const brewsRouter = require('./routes/brews');
 const usersRouter = require('./routes/users');
+const authRouter = require('./routes/auth');
 
 const app = express();
 // const brews = 
@@ -46,17 +47,17 @@ app.use(
   })
 );
 
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
 // Utilize the Express `.json()` body parser
 app.use(express.json());
 
 // call on passport when user authentication is functional
 passport.use(localStrategy);
-// passport.use(jwtStrategy);
+passport.use(jwtStrategy);
 
 //Mount routers
 app.use('/api', usersRouter);
-// app.use('/api', authRouter);
+app.use('/api', authRouter);
 
 //Endpoint below witll require valid JWT when implemented
 // app.use(passport.authenticate('jwt', { session: false, failWithError: true }));
