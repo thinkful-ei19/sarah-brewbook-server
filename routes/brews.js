@@ -9,7 +9,12 @@ const Brew = require('../models/brew');
 
 //GET all brews
 router.get('/brews', (req, res, next) => {
-  return Brew.find()
+  //update for userId
+  console.log(req.body);
+  const userId = req.user.id;
+  let filter = {userId};
+
+  return Brew.find(filter)
     .then(brews => {
       res.json(brews);
       console.log(brews);

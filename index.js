@@ -60,7 +60,7 @@ app.use('/api', usersRouter);
 app.use('/api', authRouter);
 
 //Endpoint below witll require valid JWT when implemented
-// app.use(passport.authenticate('jwt', { session: false, failWithError: true }));
+app.use(passport.authenticate('jwt', { session: false, failWithError: true }));
 
 //mount routers requiring authentication when implemented
 app.use('/api', brewsRouter);
