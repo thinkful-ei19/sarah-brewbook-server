@@ -6,16 +6,19 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const passport = require('passport');
 //is above redundant bc of db-mongoose.js?
 
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
 // const {dbConnect} = require('./db-knex');
 const bodyParser = require('body-parser');
+const localStrategy = require('./passport/local');
+// const jwtStrategy = require('./passport/jwt');
 
 //import routers
 const brewsRouter = require('./routes/brews');
-// const usersRouter = require('./routes/users');
+const usersRouter = require('./routes/users');
 
 const app = express();
 // const brews = 
@@ -47,12 +50,12 @@ app.use(
 // Utilize the Express `.json()` body parser
 app.use(express.json());
 
-//call on passport when user authentication is functional
-// passport.use(localStrategy);
+// call on passport when user authentication is functional
+passport.use(localStrategy);
 // passport.use(jwtStrategy);
 
 //Mount routers
-// app.use('/api', usersRouter);
+app.use('/api', usersRouter);
 // app.use('/api', authRouter);
 
 //Endpoint below witll require valid JWT when implemented
