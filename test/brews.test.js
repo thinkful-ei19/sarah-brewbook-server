@@ -104,6 +104,56 @@ describe('Brewbook API - Brews', function () {
 
 
   });
+
+  describe('POST /api/brews', function () {
+
+    it('should create and return a new item when provided valid data', function () {
+      const newItem = {
+        'name': 'Best IPA',
+        'recipe': 'SO MANY HOPS',
+        'notes': 'You will love it!'
+      };
+      let res;
+      return chai.request(app)
+        .post('/api/brews')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newItem)
+        .then(function (_res) {
+          res = _res;
+          expect(res).to.have.status(201);
+          expect(res).to.have.header('location');
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.keys('id', 'name', 'recipe', 'notes', 'created', 'userId');
+          return Brew.findById(res.body.id);
+        })
+        .then(data => {
+          expect(res.body.name).to.equal(data.name);
+          expect(res.body.recipe).to.equal(data.recipe);
+          expect(res.body.userId).to.equal(data.userId.toString());
+        });
+    });
+
+    it('should return an error when missing "name" field', function () {
+      const newItem = {
+        'hi': 'bye'
+      };
+
+      return chai.request(app)
+        .post('/api/brews')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newItem)
+        .catch(err => err.response)
+        .then(res => {
+          console.log(res);
+          expect(res).to.have.status(400);
+          // expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          // expect(res.body.message).to.equal('Missing `name` in request body');
+        });
+    });
+
+  });
   
 
 });
