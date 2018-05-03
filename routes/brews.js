@@ -122,7 +122,7 @@ router.delete('/brews/:id', (req, res, next) => {
   Brew.findOneAndRemove({_id: id, userId})
     .then(result => {
       if(result) {
-        res.status(204).end();
+        res.json({id}).end();
       } else {
         next();
       }
