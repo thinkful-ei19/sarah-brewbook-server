@@ -1,11 +1,13 @@
 'use strict';
-const app = require('../index');
+const {app} = require('../index');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
 const { TEST_MONGODB_URI, JWT_SECRET } = require('../config');
+
+const { dbConnect, dbDisconnect } = require('../db-mongoose');
 
 const Brew = require('../models/brew');
 const User = require('../models/user');
@@ -35,8 +37,9 @@ describe('Brewbook API - Brews', function () {
   let token;
 
   before(function () {
-    return mongoose.connect(TEST_MONGODB_URI)
-      .then(() => mongoose.connection.db.dropDatabase());
+    return dbConnect(TEST_MONGODB_URI);
+    // return mongoose.connect(TEST_MONGODB_URI)
+    //   .then(() => mongoose.connection.db.dropDatabase());
   });
 
   beforeEach(function () {
@@ -44,10 +47,12 @@ describe('Brewbook API - Brews', function () {
       User.insertMany(seedUsers),
       User.ensureIndexes(),
       Brew.insertMany(seedBrews),
+      Brew.ensureIndexes()
       // Tag.insertMany(seedTags),
       // Tag.ensureIndexes()
     ]).then(([users]) => {
       user = users[0];
+      console.log(user);
       token = jwt.sign({ user }, JWT_SECRET, { subject: user.username });
     });
   });
@@ -57,7 +62,7 @@ describe('Brewbook API - Brews', function () {
   });
 
   after(function () {
-    return mongoose.disconnect();
+    return dbDisconnect();
   });
 
   describe('GET /api/brews', function () {
@@ -78,9 +83,9 @@ describe('Brewbook API - Brews', function () {
     });
 
     it('should return a list with the correct fields', function () {
-      const dbPromise = Note.find({userId: user.id});
+      const dbPromise = Brew.find({userId: user.id});
       const apiPromise = chai.request(app)
-        .get('/api/notes')
+        .get('/api/brews')
         .set('Authorization', `Bearer ${token}`);
 
       return Promise.all([dbPromise, apiPromise])
@@ -92,7 +97,7 @@ describe('Brewbook API - Brews', function () {
           expect(res.body).to.have.length(data.length);
           res.body.forEach(function (item) {
             expect(item).to.be.a('object');
-            expect(item).to.have.keys('id', 'title', 'content', 'created', 'folderId', 'tags', 'userId');
+            expect(item).to.have.keys('id', 'name', 'recipe', 'notes', 'created', 'userId');
           });
         });
     });
