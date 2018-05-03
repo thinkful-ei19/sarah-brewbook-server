@@ -153,6 +153,25 @@ describe('Brewbook API - Brews', function () {
         });
     });
 
+    it('should return an error when missing "recipe" field', function () {
+      const newItem = {
+        'hi': 'bye'
+      };
+
+      return chai.request(app)
+        .post('/api/brews')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newItem)
+        .catch(err => err.response)
+        .then(res => {
+          console.log(res);
+          expect(res).to.have.status(400);
+          // expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          // expect(res.body.message).to.equal('Missing `name` in request body');
+        });
+    });
+
   });
   
 
