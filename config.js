@@ -6,7 +6,7 @@ module.exports = {
   DATABASE_URL:
         process.env.DATABASE_URL || 'mongodb://localhost/brewbook',
   TEST_MONGODB_URI:
-        process.env.TEST_MONGODB_URI || 'mongodb://localhost/noteful-test',
+        process.env.TEST_MONGODB_URI || 'mongodb://localhost/brewbook-test',
   JWT_SECRET: 
         process.env.JWT_SECRET,
   JWT_EXPIRY:
